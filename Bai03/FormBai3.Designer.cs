@@ -33,6 +33,7 @@
             // 
             // changeColorBtn
             // 
+            changeColorBtn.Anchor = AnchorStyles.None;
             changeColorBtn.Location = new Point(277, 187);
             changeColorBtn.Name = "changeColorBtn";
             changeColorBtn.Size = new Size(214, 56);

@@ -33,12 +33,15 @@
             // 
             // button1
             // 
-            button1.Location = new Point(202, 181);
+            button1.Anchor = AnchorStyles.None;
+            button1.BackColor = Color.Transparent;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Location = new Point(258, 186);
             button1.Name = "button1";
-            button1.Size = new Size(353, 77);
+            button1.Size = new Size(296, 63);
             button1.TabIndex = 0;
             button1.Text = "Force Paint";
-            button1.UseVisualStyleBackColor = true;
+            button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
             // 
             // FormBai2

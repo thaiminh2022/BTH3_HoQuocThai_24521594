@@ -1,4 +1,4 @@
-namespace Bai07
+namespace Bai08
 {
     internal static class Program
     {
@@ -11,7 +11,7 @@ namespace Bai07
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new FormBai7());
+            Application.Run(new FormBai8());
         }
     }
 }
