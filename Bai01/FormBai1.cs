@@ -1,44 +1,87 @@
+﻿using System.Text;
+
 namespace Bai01
 {
     public partial class FormBai1 : Form
     {
+        Form? exampleForm;
+
+        int logCount = 0;
+
         public FormBai1()
         {
             InitializeComponent();
 
+
+            AddLog("This is the event log");
+            showExampleBtn.Click += (_, _) =>
+            {
+                AddLog("Show example clicked");
+                exampleForm = new FormShowcase();
+
+                exampleForm.Load += ExampleForm_Load;
+                exampleForm.Activated += ExampleForm_Activate;
+                exampleForm.Shown += ExampleForm_Shown;
+                exampleForm.Deactivate += ExampleForm_Deactivate;
+
+                exampleForm.FormClosing += ExampleForm_FormClosing;
+                exampleForm.FormClosed += ExampleForm_FormClosed;
+
+
+                exampleForm.Show();
+            };
+
+            clearLog.Click += (_, _) =>
+            {
+                logTextBox.Text = string.Empty;
+            };
+
             Construct();
 
-            Load += Form1_Load;
-            Activated += Form1_Activated;
-            Shown += Form1_Shown;
-            Deactivate += Form1_Deactivate;
-
-            FormClosing += Form1_FormClosing;
-            FormClosed += Form1_FormClosed;
+           
         }
 
-        private void Form1_FormClosed(object? sender, FormClosedEventArgs e)
+        void AddLog(string log)
         {
+            logTextBox.AppendText($"{logCount} - {log}");
+            logTextBox.AppendText(Environment.NewLine);
+            logCount++;
         }
 
-        private void Form1_FormClosing(object? sender, FormClosingEventArgs e)
+        private void ExampleForm_FormClosed(object? sender, FormClosedEventArgs e)
         {
+            AddLog("Example form closed 🔒");
         }
 
-        private void Form1_Deactivate(object? sender, EventArgs e)
+        private void ExampleForm_FormClosing(object? sender, FormClosingEventArgs e)
         {
+            AddLog("Example form closing ⏳");
+
+            if (e.Cancel)
+            {
+                AddLog("Example form closing CANCELED");
+            }
         }
 
-        private void Form1_Shown(object? sender, EventArgs e)
+        private void ExampleForm_Deactivate(object? sender, EventArgs e)
         {
+            AddLog("Example form deactivated ❌");
+
         }
 
-        private void Form1_Activated(object? sender, EventArgs e)
+        private void ExampleForm_Shown(object? sender, EventArgs e)
         {
+            AddLog("Example form showned 👋");
         }
 
-        private void Form1_Load(object? sender, EventArgs e)
+        private void ExampleForm_Activate(object? sender, EventArgs e)
         {
+            AddLog("Example form activated 🦾");
+        }
+
+        private void ExampleForm_Load(object? sender, EventArgs e)
+        {
+            AddLog("Example form loaded 🚀");
         }
 
         void Construct() { }
