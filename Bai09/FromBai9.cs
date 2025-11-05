@@ -1,58 +1,235 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Security.AccessControl;
-using System.Windows.Forms;
+﻿using System.ComponentModel;
+using System.Text.Json;
 
 namespace Bai09
 {
     public partial class FromBai9 : Form
     {
         GenderType _currentSelectedGender = GenderType.Female;
-        BindingList<Student> _students = [];
+        
+        readonly BindingList<Student> _students = [];
+        bool isDirty = false;
+
         CoursesDualListBox _coursesDualListBox;
-        StorageJSON _storageJson = new();
+        StorageJSON? _storageJson;
 
         public FromBai9()
         {
             InitializeComponent();
 
+            // Setup dual box
             _coursesDualListBox = new(availableCoursesBox, enrollCoursesBox);
 
-            _students = new([.. _storageJson.Load()]);
-
-            if (_students.Count == 0)
-            {
-                _students.Add(
-                    new("MSSV1", "Ho QUoc Thai", MajorType.SoftwareEngineering, GenderType.Male, []));
-            }
+            // Set up dataview
             studentDataView.AutoGenerateColumns = false;
             studentDataView.DataSource = _students;
             studentDataView.SelectionChanged += StudentDataView_SelectionChanged;
 
+            // Setup major options
             var items = Enum.GetValues<MajorType>()
                             .Select(e => new KeyValuePair<MajorType, string>(e, e.ToDisplayString()))
                             .ToArray();
-
             majorCombobox.DataSource = items;
             majorCombobox.DisplayMember = "Value";
             majorCombobox.ValueMember = "Key";
 
 
 
+            // Checkbox
             maleCheckbox.CheckedChanged += CheckBoxChanged;
             femaleCheckbox.CheckedChanged += CheckBoxChanged;
 
+            // Dual box
             addToEnrolledBtn.Click += AddToEnrolledBtn_Click;
             removeFromEnrolledBtn.Click += RemoveFromEnrolledBtn_Click;
 
-            // saveInfoBtn.Click += SaveInfoBtn_Click;
+            // Tools button
+            addUpdateBtn.Click += AddUpdateBtn_Click;
+            deleteBtn.Click += DeleteBtn_Click;
             deselectBtn.Click += DeselectBtn_Click;
 
+
+            // Saving
+            saveBtn.Click += (_, _) => SaveClick();
+            saveAsBtn.Click += (_, _) => SaveAsClick();
+            openBtn.Click += (_, _) => OpenClick();
+
+            // toolstrip
+            newToolStripBtn.Click += NewToolStripBtn_Click;
+            openToolStripButton.Click += (_, _) => OpenClick();
+            saveToolStripButton.Click += (_, _) => SaveClick();
+
+            // form
+            FormClosing += FromBai9_FormClosing;
+        }
+
+        private void NewToolStripBtn_Click(object? sender, EventArgs e)
+        {
+            if (!isDirty) return;
+
+            DialogResult result = MessageBox.Show(
+                "Chưa lưu thông tin, lưu trước khi tạo mới?",
+                "Confirm Close",
+                MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Question
+            );
+
+            if (DialogResult.Yes == result)
+            {
+                var saved = SaveClick();
+
+                if (saved) {
+                    ClearInput();
+                    _students.Clear();
+                    isDirty = false;
+                }
+
+            } else if (result == DialogResult.No)
+            {
+                ClearInput();
+                _students.Clear();
+                isDirty = false;
+            }
+        }
+
+        private void FromBai9_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            if (!isDirty) return;
+            
+            DialogResult result = MessageBox.Show(
+                "Chưa lưu thông tin, lưu trước khi đóng?",
+                "Confirm Close",                
+                MessageBoxButtons.YesNoCancel,         
+                MessageBoxIcon.Question
+            );
+
+            if (DialogResult.Yes == result) {
+                var saved = SaveClick();
+                if (!saved) e.Cancel = true;
+
+            }else if (DialogResult.Cancel == result)
+            {
+                e.Cancel = true;
+            }
+
+        }
+
+
+        private void OpenClick()
+        {
+            if (_storageJson is null)
+            {
+                openFileDialog.InitialDirectory = StorageJSON.DefaultDirectory;
+            }
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                var filePath = openFileDialog.FileName;
+                _storageJson ??= new StorageJSON(filePath);
+                _storageJson.FilePath = filePath;
+
+                try
+                {
+                    var sts = _storageJson.Load();
+                    _students.Clear();
+                    foreach (var item in sts)
+                    {
+                        _students.Add(item);
+                    }
+
+                    this.Text = $"Students Database - {Path.GetFileName(filePath)}";
+                    isDirty = false;
+                }
+                catch (JsonException ex)
+                {
+                    MessageBoxHelper.ShowError($"Không đúng loại file: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    MessageBoxHelper.ShowError(ex.Message);
+                }
+            }
+        }
+        private bool SaveAsClick()
+        {
+            if (_storageJson is null)
+            {
+                saveFileDialog.InitialDirectory = StorageJSON.DefaultDirectory;
+            }
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    _storageJson = new StorageJSON(saveFileDialog.FileName);
+                    _storageJson.Store(_students);
+                    this.Text = $"Students Database - {Path.GetFileName(saveFileDialog.FileName)}";
+                    isDirty = false;
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBoxHelper.ShowError($"Không thể lưu: {ex.Message}");
+                    _storageJson = new();
+                    return false;
+                }
+            }
+            return false;
+
+        }
+        private bool SaveClick()
+        {
+            if (_storageJson is null)
+            {
+               return SaveAsClick();
+               
+            }
+            try
+            {
+                _storageJson.Store(_students);
+                MessageBoxHelper.ShowInfo($"File đã được lưu tại: {_storageJson.FilePath}");
+                isDirty = false;
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBoxHelper.ShowError($"Không thể lưu: {ex.Message}");
+                return false;
+            }
+        }
+
+        private void DeleteBtn_Click(object? sender, EventArgs e)
+        {
+            mssvTextbox.Text = mssvTextbox.Text.Trim();
+            int index = -1;
+            for (int i = 0; i < _students.Count; i++)
+            {
+                Student? item = _students[i];
+                if (item.MSSV == mssvTextbox.Text)
+                {
+                    index = i;
+                    break;
+
+                }
+            }
+
+            if (index != -1)
+            {
+                _students.RemoveAt(index);
+                isDirty = true;
+            }
+        }
+
+        void ClearInput()
+        {
+            mssvTextbox.Text = string.Empty;
+            nameTextbox.Text = string.Empty;
+            _coursesDualListBox.Reset();
         }
 
         private void DeselectBtn_Click(object? sender, EventArgs e)
         {
             studentDataView.ClearSelection();
+            ClearInput();
         }
 
         private void StudentDataView_SelectionChanged(object? sender, EventArgs e)
@@ -83,6 +260,7 @@ namespace Bai09
         private void RemoveFromEnrolledBtn_Click(object? sender, EventArgs e)
         {
             _coursesDualListBox.MoveSelectedBToA();
+            
         }
 
         private void AddToEnrolledBtn_Click(object? sender, EventArgs e)
@@ -99,7 +277,7 @@ namespace Bai09
             }
             return true;
         }
-        private void SaveInfoBtn_Click(object? sender, EventArgs e)
+        private void AddUpdateBtn_Click(object? sender, EventArgs e)
         {
             mssvTextbox.Text = mssvTextbox.Text.Trim();
             nameTextbox.Text = nameTextbox.Text.Trim();
@@ -107,14 +285,6 @@ namespace Bai09
             if (!CheckValidity(mssvTextbox, "Phải nhập mssv"))
                 return;
 
-            foreach (var student in _students)
-            {
-                if (student.MSSV == mssvTextbox.Text)
-                {
-                    MessageBoxHelper.ShowError("MSSV bị trùng");
-                    return;
-                }
-            }
 
             if (!CheckValidity(nameTextbox, "Phải nhập tên"))
                 return;
@@ -134,17 +304,30 @@ namespace Bai09
                 _currentSelectedGender,
                 _coursesDualListBox.GetEnrollCourses()
             );
-            _students.Add(st);
-            try
+
+            int index = -1;
+
+            for (int i = 0; i < _students.Count; i++)
             {
-                _storageJson.Store(_students);
-                MessageBoxHelper.ShowInfo($"Thông tin đã được lưu tại: {_storageJson.FilePath}");
-            }
-            catch (Exception ex)
-            {
-                MessageBoxHelper.ShowError($"Lỗi khi lưu: {ex.Message}");
+                Student? student = _students[i];
+                if (student.MSSV == mssvTextbox.Text)
+                {
+                    index = i;
+                    break;
+                }
             }
 
+            if (index == -1)
+            {
+                _students.Add(st);
+            }
+            else
+            {
+                //_students.RemoveAt(index);
+                //_students.Insert(index, st);
+                _students[index] = st;
+            }
+            isDirty = true;
         }
 
         private void CheckBoxChanged(object? sender, EventArgs e)
@@ -173,6 +356,7 @@ namespace Bai09
             maleCheckbox.CheckedChanged += CheckBoxChanged;
             femaleCheckbox.CheckedChanged += CheckBoxChanged;
         }
+
 
     }
 }

@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 
 namespace Bai09
 {
     internal class StorageJSON
     {
-        public readonly string FilePath;
-        public StorageJSON()
+        public string FilePath { get; set; }
+        public static string DefaultDirectory => Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        public static string DefaultFilePath => Path.Combine(DefaultDirectory, "data.json");
+
+
+        public StorageJSON(string? filePath = null)
         {
-            string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string fileName = "data.json";
-            FilePath = Path.Combine(folderPath, fileName);
+            FilePath = filePath ?? DefaultFilePath;
         }
 
         public void Store(IEnumerable<Student> students)

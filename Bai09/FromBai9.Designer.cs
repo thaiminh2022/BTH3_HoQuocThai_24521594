@@ -28,7 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FromBai9));
+            openFileDialog = new OpenFileDialog();
+            saveFileDialog = new SaveFileDialog();
             tableLayoutPanel1 = new TableLayoutPanel();
+            studentDataView = new DataGridView();
+            mssv = new DataGridViewTextBoxColumn();
+            name = new DataGridViewTextBoxColumn();
+            major = new DataGridViewTextBoxColumn();
+            gender = new DataGridViewTextBoxColumn();
+            courseCount = new DataGridViewTextBoxColumn();
             groupBox1 = new GroupBox();
             tableLayoutPanel4 = new TableLayoutPanel();
             flowLayoutPanel1 = new FlowLayoutPanel();
@@ -57,15 +66,14 @@
             panel2 = new Panel();
             maleCheckbox = new CheckBox();
             femaleCheckbox = new CheckBox();
-            studentDataView = new DataGridView();
-            mssv = new DataGridViewTextBoxColumn();
-            name = new DataGridViewTextBoxColumn();
-            major = new DataGridViewTextBoxColumn();
-            gender = new DataGridViewTextBoxColumn();
-            courseCount = new DataGridViewTextBoxColumn();
-            openFileDialog = new OpenFileDialog();
-            saveFileDialog = new SaveFileDialog();
+            newToolStripBtn = new ToolStripButton();
+            openToolStripButton = new ToolStripButton();
+            saveToolStripButton = new ToolStripButton();
+            toolStripSeparator = new ToolStripSeparator();
+            helpToolStripButton = new ToolStripButton();
+            toolStrip1 = new ToolStrip();
             tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)studentDataView).BeginInit();
             groupBox1.SuspendLayout();
             tableLayoutPanel4.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
@@ -74,8 +82,21 @@
             tableLayoutPanel3.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)studentDataView).BeginInit();
+            toolStrip1.SuspendLayout();
             SuspendLayout();
+            // 
+            // openFileDialog
+            // 
+            openFileDialog.DefaultExt = "json";
+            openFileDialog.FileName = "data.json";
+            openFileDialog.Filter = "JSON | *.json";
+            // 
+            // saveFileDialog
+            // 
+            saveFileDialog.CheckFileExists = true;
+            saveFileDialog.DefaultExt = "json";
+            saveFileDialog.FileName = "data.json";
+            saveFileDialog.Filter = "JSON | *.json";
             // 
             // tableLayoutPanel1
             // 
@@ -84,13 +105,71 @@
             tableLayoutPanel1.Controls.Add(studentDataView, 0, 1);
             tableLayoutPanel1.Controls.Add(groupBox1, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(0, 0);
+            tableLayoutPanel1.Location = new Point(0, 27);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50.81556F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 49.18444F));
-            tableLayoutPanel1.Size = new Size(1040, 797);
-            tableLayoutPanel1.TabIndex = 0;
+            tableLayoutPanel1.Size = new Size(1040, 770);
+            tableLayoutPanel1.TabIndex = 1;
+            // 
+            // studentDataView
+            // 
+            studentDataView.AllowUserToDeleteRows = false;
+            studentDataView.Anchor = AnchorStyles.Top;
+            studentDataView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            studentDataView.Columns.AddRange(new DataGridViewColumn[] { mssv, name, major, gender, courseCount });
+            studentDataView.Location = new Point(62, 394);
+            studentDataView.MultiSelect = false;
+            studentDataView.Name = "studentDataView";
+            studentDataView.RowHeadersWidth = 51;
+            studentDataView.Size = new Size(915, 347);
+            studentDataView.TabIndex = 1;
+            // 
+            // mssv
+            // 
+            mssv.DataPropertyName = "MSSV";
+            mssv.HeaderText = "MSSV";
+            mssv.MinimumWidth = 6;
+            mssv.Name = "mssv";
+            mssv.ReadOnly = true;
+            mssv.Width = 125;
+            // 
+            // name
+            // 
+            name.DataPropertyName = "HoTen";
+            name.HeaderText = "Họ Tên";
+            name.MinimumWidth = 6;
+            name.Name = "name";
+            name.ReadOnly = true;
+            name.Width = 250;
+            // 
+            // major
+            // 
+            major.DataPropertyName = "MajorDisplay";
+            major.HeaderText = "Chuyên Ngành";
+            major.MinimumWidth = 6;
+            major.Name = "major";
+            major.ReadOnly = true;
+            major.Width = 250;
+            // 
+            // gender
+            // 
+            gender.DataPropertyName = "GenderDisplay";
+            gender.HeaderText = "Giới Tính";
+            gender.MinimumWidth = 6;
+            gender.Name = "gender";
+            gender.ReadOnly = true;
+            gender.Width = 125;
+            // 
+            // courseCount
+            // 
+            courseCount.DataPropertyName = "EnrollCoursesCount";
+            courseCount.HeaderText = "Số Môn";
+            courseCount.MinimumWidth = 6;
+            courseCount.Name = "courseCount";
+            courseCount.ReadOnly = true;
+            courseCount.Width = 125;
             // 
             // groupBox1
             // 
@@ -98,7 +177,7 @@
             groupBox1.Controls.Add(tableLayoutPanel4);
             groupBox1.Controls.Add(panel1);
             groupBox1.Controls.Add(tableLayoutPanel2);
-            groupBox1.Location = new Point(64, 16);
+            groupBox1.Location = new Point(64, 9);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(912, 373);
             groupBox1.TabIndex = 0;
@@ -289,7 +368,7 @@
             tableLayoutPanel2.Controls.Add(mssvTextbox, 1, 0);
             tableLayoutPanel2.Controls.Add(majorCombobox, 1, 2);
             tableLayoutPanel2.Controls.Add(panel2, 1, 3);
-            tableLayoutPanel2.Location = new Point(146, 27);
+            tableLayoutPanel2.Location = new Point(143, 30);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 4;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 20F));
@@ -402,71 +481,56 @@
             femaleCheckbox.Text = "Nữ";
             femaleCheckbox.UseVisualStyleBackColor = true;
             // 
-            // studentDataView
+            // newToolStripBtn
             // 
-            studentDataView.AllowUserToDeleteRows = false;
-            studentDataView.Anchor = AnchorStyles.Top;
-            studentDataView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            studentDataView.Columns.AddRange(new DataGridViewColumn[] { mssv, name, major, gender, courseCount });
-            studentDataView.Location = new Point(62, 408);
-            studentDataView.MultiSelect = false;
-            studentDataView.Name = "studentDataView";
-            studentDataView.RowHeadersWidth = 51;
-            studentDataView.Size = new Size(915, 347);
-            studentDataView.TabIndex = 1;
+            newToolStripBtn.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            newToolStripBtn.Image = (Image)resources.GetObject("newToolStripBtn.Image");
+            newToolStripBtn.ImageTransparentColor = Color.Magenta;
+            newToolStripBtn.Name = "newToolStripBtn";
+            newToolStripBtn.Size = new Size(29, 24);
+            newToolStripBtn.Text = "&New";
             // 
-            // mssv
+            // openToolStripButton
             // 
-            mssv.DataPropertyName = "MSSV";
-            mssv.HeaderText = "MSSV";
-            mssv.MinimumWidth = 6;
-            mssv.Name = "mssv";
-            mssv.ReadOnly = true;
-            mssv.Width = 125;
+            openToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            openToolStripButton.Image = (Image)resources.GetObject("openToolStripButton.Image");
+            openToolStripButton.ImageTransparentColor = Color.Magenta;
+            openToolStripButton.Name = "openToolStripButton";
+            openToolStripButton.Size = new Size(29, 24);
+            openToolStripButton.Text = "&Open";
             // 
-            // name
+            // saveToolStripButton
             // 
-            name.DataPropertyName = "HoTen";
-            name.HeaderText = "Họ Tên";
-            name.MinimumWidth = 6;
-            name.Name = "name";
-            name.ReadOnly = true;
-            name.Width = 250;
+            saveToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            saveToolStripButton.Image = (Image)resources.GetObject("saveToolStripButton.Image");
+            saveToolStripButton.ImageTransparentColor = Color.Magenta;
+            saveToolStripButton.Name = "saveToolStripButton";
+            saveToolStripButton.Size = new Size(29, 24);
+            saveToolStripButton.Text = "&Save";
             // 
-            // major
+            // toolStripSeparator
             // 
-            major.DataPropertyName = "MajorDisplay";
-            major.HeaderText = "Chuyên Ngành";
-            major.MinimumWidth = 6;
-            major.Name = "major";
-            major.ReadOnly = true;
-            major.Width = 250;
+            toolStripSeparator.Name = "toolStripSeparator";
+            toolStripSeparator.Size = new Size(6, 27);
             // 
-            // gender
+            // helpToolStripButton
             // 
-            gender.DataPropertyName = "GenderDisplay";
-            gender.HeaderText = "Giới Tính";
-            gender.MinimumWidth = 6;
-            gender.Name = "gender";
-            gender.ReadOnly = true;
-            gender.Width = 125;
+            helpToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            helpToolStripButton.Image = (Image)resources.GetObject("helpToolStripButton.Image");
+            helpToolStripButton.ImageTransparentColor = Color.Magenta;
+            helpToolStripButton.Name = "helpToolStripButton";
+            helpToolStripButton.Size = new Size(29, 24);
+            helpToolStripButton.Text = "He&lp";
             // 
-            // courseCount
+            // toolStrip1
             // 
-            courseCount.DataPropertyName = "EnrollCoursesCount";
-            courseCount.HeaderText = "Số Môn";
-            courseCount.MinimumWidth = 6;
-            courseCount.Name = "courseCount";
-            courseCount.ReadOnly = true;
-            courseCount.Width = 125;
-            // 
-            // openFileDialog
-            // 
-            openFileDialog.FileName = "data.json";
-            // 
-            // saveFileDialog
-            // 
-            saveFileDialog.FileName = "data.json";
+            toolStrip1.ImageScalingSize = new Size(20, 20);
+            toolStrip1.Items.AddRange(new ToolStripItem[] { newToolStripBtn, openToolStripButton, saveToolStripButton, toolStripSeparator, helpToolStripButton });
+            toolStrip1.Location = new Point(0, 0);
+            toolStrip1.Name = "toolStrip1";
+            toolStrip1.Size = new Size(1040, 27);
+            toolStrip1.TabIndex = 0;
+            toolStrip1.Text = "toolStrip1";
             // 
             // FromBai9
             // 
@@ -474,11 +538,13 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1040, 797);
             Controls.Add(tableLayoutPanel1);
+            Controls.Add(toolStrip1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "FromBai9";
-            Text = "wwwww";
+            Text = "Students Database";
             tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)studentDataView).EndInit();
             groupBox1.ResumeLayout(false);
             tableLayoutPanel4.ResumeLayout(false);
             flowLayoutPanel1.ResumeLayout(false);
@@ -490,48 +556,55 @@
             tableLayoutPanel2.PerformLayout();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)studentDataView).EndInit();
+            toolStrip1.ResumeLayout(false);
+            toolStrip1.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
-
+        private OpenFileDialog openFileDialog;
+        private SaveFileDialog saveFileDialog;
         private TableLayoutPanel tableLayoutPanel1;
         private DataGridView studentDataView;
-        private GroupBox groupBox1;
-        private TableLayoutPanel tableLayoutPanel2;
-        private Label label1;
-        private Label label2;
-        private Label label3;
-        private Label label4;
-        private TextBox nameTextbox;
-        private TextBox mssvTextbox;
-        private ComboBox majorCombobox;
-        private Panel panel1;
-        private Label label5;
-        private TableLayoutPanel tableLayoutPanel3;
-        private Button addToEnrolledBtn;
-        private Button removeFromEnrolledBtn;
-        private ListBox enrollCoursesBox;
-        private ListBox availableCoursesBox;
-        private Panel panel2;
-        private CheckBox maleCheckbox;
-        private CheckBox femaleCheckbox;
         private DataGridViewTextBoxColumn mssv;
         private DataGridViewTextBoxColumn name;
         private DataGridViewTextBoxColumn major;
         private DataGridViewTextBoxColumn gender;
         private DataGridViewTextBoxColumn courseCount;
+        private GroupBox groupBox1;
         private TableLayoutPanel tableLayoutPanel4;
         private FlowLayoutPanel flowLayoutPanel1;
-        private FlowLayoutPanel flowLayoutPanel2;
         private Button addUpdateBtn;
         private Button deleteBtn;
+        private Button deselectBtn;
+        private FlowLayoutPanel flowLayoutPanel2;
         private Button saveAsBtn;
         private Button saveBtn;
         private Button openBtn;
-        private Button deselectBtn;
-        private OpenFileDialog openFileDialog;
-        private SaveFileDialog saveFileDialog;
+        private Panel panel1;
+        private TableLayoutPanel tableLayoutPanel3;
+        private ListBox enrollCoursesBox;
+        private Button addToEnrolledBtn;
+        private Button removeFromEnrolledBtn;
+        private ListBox availableCoursesBox;
+        private Label label5;
+        private TableLayoutPanel tableLayoutPanel2;
+        private TextBox nameTextbox;
+        private Label label1;
+        private Label label2;
+        private Label label3;
+        private Label label4;
+        private TextBox mssvTextbox;
+        private ComboBox majorCombobox;
+        private Panel panel2;
+        private CheckBox maleCheckbox;
+        private CheckBox femaleCheckbox;
+        private ToolStripButton newToolStripBtn;
+        private ToolStripButton openToolStripButton;
+        private ToolStripButton saveToolStripButton;
+        private ToolStripSeparator toolStripSeparator;
+        private ToolStripButton helpToolStripButton;
+        private ToolStrip toolStrip1;
     }
 }

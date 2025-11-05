@@ -98,7 +98,11 @@ namespace Bai09
         public void Reset()
         {
             _availableCourses.Clear();
-            _availableCourses = new([.. _defaultValues]);
+            foreach (var item in _defaultValues)
+            {
+                _availableCourses.Add(item);
+            }
+
             _selectedCourses.Clear();
         }
     }
