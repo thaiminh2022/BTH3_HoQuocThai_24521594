@@ -1,314 +1,410 @@
+﻿using System;
 using System.Data;
 
 namespace Bai06
 {
     public partial class FormBai6 : Form
     {
-        bool requestNewBuffer = false;
-        bool requireClearAll = false;
-
-        double? memory = null;
-
+        Calculator _calculator;
+        bool _requireClear = false;
+        bool _allowAddOp = true;
         public FormBai6()
         {
             InitializeComponent();
+            _calculator = new Calculator();
+
+            // SETUP
+            calBox.Text = "0";
+
+
+            // NUMBER RELATED BUTTONS
+            Button[] numButtons = [
+                n0Btn, n1Btn, n2Btn, n3Btn, n4Btn, n5Btn, n6Btn, n7Btn, n8Btn, n9Btn,
+            ];
+            for (int i = 0; i < numButtons.Length; i++) {
+                int num = i;
+                numButtons[i].Click += (_, _) => NumberButtonClicked(num);
+            }
+
+            dotBtn.Click += DotBtn_Click;
+
+            // OPERATOR BUTTONS
+            Button[] opButtons = [
+                addBtn, subBtn, mulBtn, divideBtn,    
+            ];
+            foreach (var opBtn in opButtons) {
+                opBtn.Click += OpBtn_Click;
+            }
+
+            // Memory Clear
+            memAddBtn.Click += MemAddBtn_Click;
+            memCallBtn.Click += MemCallBtn_Click;
+            memClearBtn.Click += MemClearBtn_Click;
+            memSaveBtn.Click += MemSaveBtn_Click;
+
+            // FUNCTION BUTTONS
+            cBtn.Click += (_, _) => ClearCal();
+            ceBtn.Click += CeBtn_Click;
+            toggleSignBtn.Click += ToggleSignBtn_Click;
+            oneOverXBtn.Click += OneOverXBtn_Click;
+            percentBtn.Click += PercentBtn_Click;
+            sqrtBtn.Click += SqrtBtn_Click;
 
             backspaceBtn.Click += BackspaceBtn_Click;
 
+            // EQUALS BUTTON
+            equalBtn.Click += EqualBtn_Click;
 
-            calBox.Text = string.Empty;
-            n1Btn.Click += AddToCalBox;
-            n2Btn.Click += AddToCalBox;
-            n3Btn.Click += AddToCalBox;
-            n4Btn.Click += AddToCalBox;
-            n5Btn.Click += AddToCalBox;
-            n6Btn.Click += AddToCalBox;
-            n7Btn.Click += AddToCalBox;
-            n8Btn.Click += AddToCalBox;
-            n9Btn.Click += AddToCalBox;
-            n0Btn.Click += AddToCalBox;
-            dotBtn.Click += AddDot;
-
-            addBtn.Click += AddOperator;
-            subBtn.Click += AddOperator;
-            mulBtn.Click += AddOperator;
-            divideBtn.Click += AddOperator;
-
-            equalBtn.Click += EvaluateExpression;
-            sqrtBtn.Click += SqrtBtn_Click;
-            oneOverXBtn.Click += OneOverXBtn_Click;
-            percentBtn.Click += PercentBtn_Click;
-            cBtn.Click += CBtn_Click;
-            ceBtn.Click += CeBtn_Click;
-            toggleSignBtn.Click += ToggleSignBtn_Click;
-
-            memClearBtn.Click += MemClearBtn_Click;
-            memCallBtn.Click += MemCallBtn_Click;
-            memSaveBtn.Click += MemSaveBtn_Click;
-            memAddBtn.Click += MemAddBtn_Click;
-
+            // Toolstrip
+            helpToolStripMenuItem.Click += HelpToolStripMenuItem_Click;
         }
 
-        private void MemAddBtn_Click(object? sender, EventArgs e)
+        private void HelpToolStripMenuItem_Click(object? sender, EventArgs e)
         {
-            if (memory is not null)
-            {
-                if (double.TryParse(calBox.Text, out var n))
-                {
-                    memory += n;
-                }
-            }
-            else
-            {
-                MessageBox.Show("No memory");
-            }
+            var text = @"
+                Input & editing
+                    Digits: 0–9 -> enter numbers.
+                    Decimal: . —> use to type fractional numbers (e.g., 3.14).
+                    Backspace —> remove last digit.
+                    CE -> clears the current number you are typing only.
+                    C —> resets the entire calculation and clears entries.
+
+                Basic operations
+                    + − × ÷ —> standard arithmetic operators.
+                    = —> evaluate the current expression.
+                    +/- —> toggle sign of the current entry (positive <-> negative).
+                    % —> percent: divide value by 100
+
+                Memory
+                    M+ —> add current value to memory.
+                    MS —> save current value to memory.
+                    MR —> recall value from memory.
+                    MC —> clear memory.
+
+                Advanced functions
+                    sqrt —> square root.
+                    1/x —> reciprocal (divide 1 by the current value).
+            ";
+
+            MessageBox.Show(text, "Calculator Helper");
         }
+
+        #region Memory
 
         private void MemSaveBtn_Click(object? sender, EventArgs e)
         {
-            if (double.TryParse(calBox.Text, out var n))
-            {
-                memory = n;
-            }
-        }
+            if (_requireClear) return;
 
-        private void MemCallBtn_Click(object? sender, EventArgs e)
-        {
-            if (memory is not null)
+            if (double.TryParse(calBox.Text, out var num))
             {
-                calBox.Text = memory.ToString();
-            }
-            else
-            {
-                MessageBox.Show("No memory");
+                _calculator.MemorySave(num);
             }
         }
 
         private void MemClearBtn_Click(object? sender, EventArgs e)
         {
-            memory = null;
+            if (_requireClear) return;
+            _calculator.MemoryClear();
         }
 
-        private void CBtn_Click(object? sender, EventArgs e)
+        private void MemCallBtn_Click(object? sender, EventArgs e)
         {
-            requireClearAll = false;
-            calBox.Text = string.Empty;
-            bufferBox.Text = string.Empty;
+            if (_requireClear) return;
+
+            var memValue = _calculator.MemoryRecall();
+            if (memValue == null) return;
+
+            calBox.Text = memValue.ToString();
         }
 
+        private void MemAddBtn_Click(object? sender, EventArgs e)
+        {
+            if (_requireClear) return;
+
+            if (double.TryParse(calBox.Text, out var num))
+            {
+                _calculator.MemoryAdd(num);
+            }
+        }
+
+        #endregion
+
+        #region Function Button
         private void CeBtn_Click(object? sender, EventArgs e)
         {
-            if (requireClearAll)
+            if (_requireClear)
             {
-                CBtn_Click(sender, e);
+                ClearCal();
+                return;
             }
 
-            if (calBox.Text == string.Empty)
+            if (!_calculator.Evaluated)
             {
-                bufferBox.Text = string.Empty;
+                calBox.Text = "0";
             }
             else
             {
-                calBox.Text = string.Empty;
+                _calculator.ClearTillLast();
+                bufferBox.Text = string.Empty;
+                calBox.Text = "0";
+            }
+
+        }
+        private void ClearCal()
+        {
+            calBox.Text = "0";
+            bufferBox.Text = string.Empty;
+            _calculator.ResetBuffer();
+            _requireClear = false;
+        }
+        private void ToggleSignBtn_Click(object? sender, EventArgs e)
+        {
+            if (_requireClear) return;
+
+            if (_calculator.Evaluated)
+            {
+                var lastResult = calBox.Text;
+                ClearCal();
+                calBox.Text = lastResult;
+            }
+
+            if (calBox.Text[0] == '-')
+            {
+                calBox.Text = calBox.Text[1..];
+            }else
+            {
+                calBox.Text = '-' + calBox.Text;
             }
         }
 
-        private void ToggleSignBtn_Click(object? sender, EventArgs e)
+        private void SqrtBtn_Click(object? sender, EventArgs e)
         {
-            if (requireClearAll) return;
+            if (_requireClear) return;
 
-            if (double.TryParse(calBox.Text, out var n))
+            if (double.TryParse(calBox.Text, out var num))
             {
-                calBox.Text = (-n).ToString();
+                if (num < 0)
+                {
+  
+                    MessageBox.Show("Cannot take the square root of a negative",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                    return;
+                }
+                var newVal = Math.Sqrt(num);
+                calBox.Text = newVal.ToString();
             }
         }
 
         private void PercentBtn_Click(object? sender, EventArgs e)
         {
-            if (requireClearAll) return;
+            if (_requireClear) return;
 
-            if (double.TryParse(calBox.Text, out var n))
+            if (double.TryParse(calBox.Text, out var num))
             {
-                if (requestNewBuffer)
-                {
-                    bufferBox.Text = string.Empty;
-                    requestNewBuffer = false;
-                }
-                calBox.Text = (n / 100.0).ToString();
+                var newVal = num / 100.0;
+                calBox.Text = newVal.ToString();
             }
         }
 
         private void OneOverXBtn_Click(object? sender, EventArgs e)
         {
-            if (requireClearAll) return;
+            if (_requireClear) return;
 
-            if (double.TryParse(calBox.Text, out var n))
+            if (double.TryParse(calBox.Text, out var num))
             {
-                if (n == 0)
+                if (num == 0)
                 {
-                    MessageBox.Show("Cannot divide by 0");
+                    MessageBox.Show("Divided by zero error",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                    return;
                 }
-                else
-                {
-                    if (requestNewBuffer)
-                    {
-                        bufferBox.Text = string.Empty;
-                        requestNewBuffer = false;
-                    }
-                    calBox.Text = (1.0 / n).ToString();
-                }
-            }
 
-        }
-
-        private void SqrtBtn_Click(object? sender, EventArgs e)
-        {
-            if (requireClearAll) return;
-
-            if (double.TryParse(calBox.Text, out var n))
-            {
-                if (n < 0)
-                {
-                    MessageBox.Show("Cannot take square root of a negative number");
-                }
-                else
-                {
-                    if (requestNewBuffer)
-                    {
-                        bufferBox.Text = string.Empty;
-                        requestNewBuffer = false;
-                    }
-
-                    calBox.Text = Math.Sqrt(n).ToString();
-                }
+                var newVal = 1.0 / num;
+                calBox.Text = newVal.ToString();
             }
         }
 
-        private void EvaluateExpression(object? sender, EventArgs e)
-        {
-            if (requestNewBuffer)
-            {
-                return;
-            }
-
-
-            bufferBox.Text += calBox.Text;
-            calBox.Text = string.Empty;
-            var expression = bufferBox.Text.Trim();
-
-            try
-            {
-                var result = new DataTable().Compute(expression, null);
-                if (result is null)
-                {
-                    requireClearAll = true;
-                    throw new Exception("NO numeric result");
-                }
-
-                bool success = double.TryParse(result.ToString(),
-                    out var answer);
-
-                if (success)
-                {
-                    if (double.IsInfinity(answer))
-                    {
-                        requireClearAll = true;
-                        throw new DivideByZeroException("Divide by 0");
-                    }
-                    calBox.Text = result.ToString();
-                    requestNewBuffer = true;
-                }
-                else
-                {
-                    requireClearAll = true;
-                    throw new Exception("Not a number");
-                }
-
-
-
-            }
-            catch (Exception ex)
-            {
-                requireClearAll = true;
-                MessageBox.Show($"Cannot evaluate: {ex.Message}");
-            }
-        }
-        private void AddOperator(object? sender, EventArgs e)
-        {
-            if (requireClearAll) return;
-
-            calBox.Text = calBox.Text.Trim();
-            if (sender is null) return;
-
-            if (sender is not Button btn)
-                return;
-            if (string.IsNullOrEmpty(calBox.Text)) return;
-            if (calBox.Text == "0")
-                return;
-
-            var latestChar = calBox.Text.Last();
-            if (char.IsDigit(latestChar))
-            {
-                if (requestNewBuffer)
-                {
-                    bufferBox.Text = string.Empty;
-                    requestNewBuffer = false;
-                }
-
-                calBox.Text += btn.Text;
-                bufferBox.Text += calBox.Text;
-                calBox.Text = string.Empty;
-            }
-
-        }
         private void BackspaceBtn_Click(object? sender, EventArgs e)
         {
-            if (requireClearAll) { return; }
+            if (_requireClear) return;
 
-            if (!string.IsNullOrEmpty(calBox.Text))
+            if (calBox.Text.Length <= 1)
             {
-                var nextLastIdx = calBox.Text.Length - 1;
-                calBox.Text = calBox.Text[0..nextLastIdx];
+                calBox.Text = "0";
+                return;
             }
+
+                if (_calculator.Evaluated)
+                    return;
+
+            calBox.Text = calBox.Text[..^1];
+
         }
 
-        void AddDot(object? sender, EventArgs e)
+        #endregion
+
+        #region Number Button
+        private void DotBtn_Click(object? sender, EventArgs e)
         {
-            if (requireClearAll) { return; }
+            if (_requireClear) return;
 
-            if (calBox.Text.Contains('.')) return;
-
-            if (string.IsNullOrWhiteSpace(calBox.Text))
+            if (_calculator.Evaluated)
             {
-                calBox.Text = "0.";
+                var lastResult = calBox.Text;
+                ClearCal();
+                calBox.Text = lastResult;
             }
-            else
+
+            if (!calBox.Text.Contains('.'))
             {
                 calBox.Text += ".";
             }
         }
-        void AddToCalBox(object? sender, EventArgs args)
+
+        private void NumberButtonClicked(int i)
         {
-            if (requireClearAll) { return; }
+            if (_requireClear) return;
 
-            calBox.Text = calBox.Text.Trim();
-            if (sender is null) return;
 
-            if (sender is not Button btn)
+
+            if (_calculator.Evaluated)
             {
+                ClearCal();
+                calBox.Text = i.ToString();
+                _allowAddOp = true;
                 return;
             }
 
-            if (calBox.Text == "0")
-            {
-                calBox.Text = btn.Text;
-            }
-            else
-            {
-                calBox.Text += btn.Text;
+
+            if (calBox.Text == "0") { 
+                calBox.Text = i.ToString();
+                _allowAddOp = true;
+                return;
             }
 
+            calBox.Text += i.ToString();
+            _allowAddOp = true;
 
+        }
+
+        #endregion
+
+        #region Operator Button
+        private void OpBtn_Click(object? sender, EventArgs e)
+        {
+            if (_requireClear) return;
+
+            if (sender is not Button btn)
+                return;
+
+            var op = btn.Text[0] switch
+            {
+                '+' => Calculator.Operator.Plus,
+                '-' => Calculator.Operator.Minus,
+                '*' => Calculator.Operator.Mul,
+                '/' => Calculator.Operator.Divide,
+                _ => throw new NotImplementedException()
+            };
+
+
+            if (!_allowAddOp)
+            {
+                _calculator.ModifyNextOperator(op);
+                bufferBox.Text = _calculator.DisplayBufferString;
+
+                return;
+            }
+
+            if (_calculator.Evaluated)
+            {
+                _calculator.ResetBuffer();
+            }
+
+            
+            if (double.TryParse(calBox.Text, out var num))
+            {
+                try
+                {
+                    _calculator.AddToCalc(op, num);
+                    // Reset
+                    bufferBox.Text = _calculator.DisplayBufferString;
+                    calBox.Text = "0";
+
+                    _allowAddOp = false;
+                }
+                catch (DivideByZeroException) {
+                    MessageBox.Show("Divided by zero error",
+                        "Error",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                }
+
+
+            }
+        }
+
+        #endregion
+
+        private void EqualBtn_Click(object? sender, EventArgs e)
+        {
+            void UpdateCalcBox()
+            {
+                try
+                {
+                    calBox.Text = _calculator.Evaluate().ToString();
+                    bufferBox.Text = _calculator.DisplayBufferString;
+                    bufferBox.Text += "=";
+                }catch (DivideByZeroException)
+                {
+                    MessageBox.Show("Divided by zero error, clear before continue", 
+                        "Error", 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Error
+                    );
+                    _requireClear = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{ex.Message} Clear before continue", 
+                        "Error", 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Error
+                    );
+
+                    _requireClear = true;
+                }
+               
+            }
+           
+
+            if (_calculator.Evaluated)
+            {
+                UpdateCalcBox();
+                return;
+            }
+
+            if (double.TryParse(calBox.Text, out var num))
+            {
+                try
+                {
+                    _calculator.AddToCalc(Calculator.Operator.Noop, num);
+                    UpdateCalcBox();
+                }
+                catch (DivideByZeroException) {
+                    MessageBox.Show("Divided by zero error",
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                    );
+                }
+            }
         }
 
     }

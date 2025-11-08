@@ -42,6 +42,7 @@
             // 
             // plusBtn
             // 
+            plusBtn.Font = new Font("Segoe UI", 18F);
             plusBtn.Location = new Point(151, 203);
             plusBtn.Name = "plusBtn";
             plusBtn.Size = new Size(94, 80);
@@ -51,6 +52,7 @@
             // 
             // minusBtn
             // 
+            minusBtn.Font = new Font("Segoe UI", 18F);
             minusBtn.Location = new Point(275, 203);
             minusBtn.Name = "minusBtn";
             minusBtn.Size = new Size(94, 80);
@@ -60,6 +62,7 @@
             // 
             // multiplyBtn
             // 
+            multiplyBtn.Font = new Font("Segoe UI", 18F);
             multiplyBtn.Location = new Point(395, 203);
             multiplyBtn.Name = "multiplyBtn";
             multiplyBtn.Size = new Size(94, 80);
@@ -69,6 +72,7 @@
             // 
             // divideBtn
             // 
+            divideBtn.Font = new Font("Segoe UI", 18F);
             divideBtn.Location = new Point(525, 203);
             divideBtn.Name = "divideBtn";
             divideBtn.Size = new Size(94, 80);

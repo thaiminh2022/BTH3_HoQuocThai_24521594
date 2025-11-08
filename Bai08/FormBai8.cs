@@ -15,8 +15,19 @@ namespace Bai08
             
             addUpdateBtn.Click += AddUpdateBtn_Click;
             deleteBtn.Click += DeleteBtn_Click;
+            quitBtn.Click += (_, _) => Close();
 
             accountListView.SelectedIndexChanged += AccountListView_SelectedIndexChanged;
+            FormClosing += FormBai8_FormClosing;
+        }
+
+        private void FormBai8_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            var result = MessageBox.Show("Confirm closed?", "Confirm close", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (result != DialogResult.OK)
+            {
+                e.Cancel = true;
+            } 
         }
 
         private void DeleteBtn_Click(object? sender, EventArgs e)
@@ -56,6 +67,8 @@ namespace Bai08
                     taiKhoans[i].Index = i;
                     accountListView.Items[i].Text = i.ToString();
                 }
+
+                UpdateMoneyLabel();
             }
         }
 
@@ -88,7 +101,7 @@ namespace Bai08
                 !string.IsNullOrWhiteSpace(tenKHInput.Text) &&
                 !string.IsNullOrWhiteSpace(diaChiInput.Text);
 
-            var numCond = uint.TryParse(soTienInput.Text, out _);
+            var numCond = ulong.TryParse(soTienInput.Text, out _);
 
 
             if (!textCond || !numCond)
@@ -109,7 +122,7 @@ namespace Bai08
                 stkInput.Text, 
                 tenKHInput.Text, 
                 diaChiInput.Text, 
-                uint.Parse(soTienInput.Text)
+                ulong.Parse(soTienInput.Text)
             );
 
             var foundIndex = -1;
@@ -143,7 +156,12 @@ namespace Bai08
         }
         private void UpdateMoneyLabel()
         {
-            sumLabel.Text = taiKhoans.Sum(x => x.SoTienTrongTK).ToString();
+            ulong value = 0;
+            foreach (var t in taiKhoans) {
+                value += t.SoTienTrongTK;
+            }
+
+            sumLabel.Text = value.ToString();
         }
         private void CleanInput()
         {

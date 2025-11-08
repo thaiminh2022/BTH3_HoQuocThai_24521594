@@ -5,7 +5,6 @@
         Color _takenColor = Color.Yellow;
         Color _selectedColor = Color.Blue;
 
-
         readonly List<CheckBox> checkBoxes;
 
         public FormBai7()

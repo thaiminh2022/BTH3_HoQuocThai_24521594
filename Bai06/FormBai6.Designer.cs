@@ -164,6 +164,7 @@
             // equalBtn
             // 
             equalBtn.Dock = DockStyle.Fill;
+            equalBtn.Font = new Font("Segoe UI", 12F);
             equalBtn.Location = new Point(398, 271);
             equalBtn.Name = "equalBtn";
             equalBtn.Size = new Size(75, 65);
@@ -174,6 +175,7 @@
             // addBtn
             // 
             addBtn.Dock = DockStyle.Fill;
+            addBtn.Font = new Font("Segoe UI", 12F);
             addBtn.Location = new Point(319, 271);
             addBtn.Name = "addBtn";
             addBtn.Size = new Size(73, 65);
@@ -184,6 +186,7 @@
             // dotBtn
             // 
             dotBtn.Dock = DockStyle.Fill;
+            dotBtn.Font = new Font("Segoe UI", 12F);
             dotBtn.Location = new Point(240, 271);
             dotBtn.Name = "dotBtn";
             dotBtn.Size = new Size(73, 65);
@@ -194,6 +197,7 @@
             // toggleSignBtn
             // 
             toggleSignBtn.Dock = DockStyle.Fill;
+            toggleSignBtn.Font = new Font("Segoe UI", 12F);
             toggleSignBtn.Location = new Point(161, 271);
             toggleSignBtn.Name = "toggleSignBtn";
             toggleSignBtn.Size = new Size(73, 65);
@@ -204,6 +208,7 @@
             // n0Btn
             // 
             n0Btn.Dock = DockStyle.Fill;
+            n0Btn.Font = new Font("Segoe UI", 12F);
             n0Btn.Location = new Point(82, 271);
             n0Btn.Name = "n0Btn";
             n0Btn.Size = new Size(73, 65);
@@ -214,6 +219,7 @@
             // memAddBtn
             // 
             memAddBtn.Dock = DockStyle.Fill;
+            memAddBtn.Font = new Font("Segoe UI", 12F);
             memAddBtn.Location = new Point(3, 271);
             memAddBtn.Name = "memAddBtn";
             memAddBtn.Size = new Size(73, 65);
@@ -224,6 +230,7 @@
             // oneOverXBtn
             // 
             oneOverXBtn.Dock = DockStyle.Fill;
+            oneOverXBtn.Font = new Font("Segoe UI", 12F);
             oneOverXBtn.Location = new Point(398, 204);
             oneOverXBtn.Name = "oneOverXBtn";
             oneOverXBtn.Size = new Size(75, 61);
@@ -234,6 +241,7 @@
             // subBtn
             // 
             subBtn.Dock = DockStyle.Fill;
+            subBtn.Font = new Font("Segoe UI", 12F);
             subBtn.Location = new Point(319, 204);
             subBtn.Name = "subBtn";
             subBtn.Size = new Size(73, 61);
@@ -244,6 +252,7 @@
             // n3Btn
             // 
             n3Btn.Dock = DockStyle.Fill;
+            n3Btn.Font = new Font("Segoe UI", 15F);
             n3Btn.Location = new Point(240, 204);
             n3Btn.Name = "n3Btn";
             n3Btn.Size = new Size(73, 61);
@@ -254,6 +263,7 @@
             // n2Btn
             // 
             n2Btn.Dock = DockStyle.Fill;
+            n2Btn.Font = new Font("Segoe UI", 15F);
             n2Btn.Location = new Point(161, 204);
             n2Btn.Name = "n2Btn";
             n2Btn.Size = new Size(73, 61);
@@ -264,6 +274,7 @@
             // n1Btn
             // 
             n1Btn.Dock = DockStyle.Fill;
+            n1Btn.Font = new Font("Segoe UI", 15F);
             n1Btn.Location = new Point(82, 204);
             n1Btn.Name = "n1Btn";
             n1Btn.Size = new Size(73, 61);
@@ -274,6 +285,7 @@
             // memSaveBtn
             // 
             memSaveBtn.Dock = DockStyle.Fill;
+            memSaveBtn.Font = new Font("Segoe UI", 12F);
             memSaveBtn.Location = new Point(3, 204);
             memSaveBtn.Name = "memSaveBtn";
             memSaveBtn.Size = new Size(73, 61);
@@ -284,6 +296,7 @@
             // percentBtn
             // 
             percentBtn.Dock = DockStyle.Fill;
+            percentBtn.Font = new Font("Segoe UI", 12F);
             percentBtn.Location = new Point(398, 137);
             percentBtn.Name = "percentBtn";
             percentBtn.Size = new Size(75, 61);
@@ -294,6 +307,7 @@
             // mulBtn
             // 
             mulBtn.Dock = DockStyle.Fill;
+            mulBtn.Font = new Font("Segoe UI", 12F);
             mulBtn.Location = new Point(319, 137);
             mulBtn.Name = "mulBtn";
             mulBtn.Size = new Size(73, 61);
@@ -304,6 +318,7 @@
             // n6Btn
             // 
             n6Btn.Dock = DockStyle.Fill;
+            n6Btn.Font = new Font("Segoe UI", 15F);
             n6Btn.Location = new Point(240, 137);
             n6Btn.Name = "n6Btn";
             n6Btn.Size = new Size(73, 61);
@@ -314,6 +329,7 @@
             // n5Btn
             // 
             n5Btn.Dock = DockStyle.Fill;
+            n5Btn.Font = new Font("Segoe UI", 15F);
             n5Btn.Location = new Point(161, 137);
             n5Btn.Name = "n5Btn";
             n5Btn.Size = new Size(73, 61);
@@ -324,6 +340,7 @@
             // n4Btn
             // 
             n4Btn.Dock = DockStyle.Fill;
+            n4Btn.Font = new Font("Segoe UI", 15F);
             n4Btn.Location = new Point(82, 137);
             n4Btn.Name = "n4Btn";
             n4Btn.Size = new Size(73, 61);
@@ -334,6 +351,7 @@
             // memCallBtn
             // 
             memCallBtn.Dock = DockStyle.Fill;
+            memCallBtn.Font = new Font("Segoe UI", 12F);
             memCallBtn.Location = new Point(3, 137);
             memCallBtn.Name = "memCallBtn";
             memCallBtn.Size = new Size(73, 61);
@@ -344,6 +362,7 @@
             // sqrtBtn
             // 
             sqrtBtn.Dock = DockStyle.Fill;
+            sqrtBtn.Font = new Font("Segoe UI", 12F);
             sqrtBtn.Location = new Point(398, 70);
             sqrtBtn.Name = "sqrtBtn";
             sqrtBtn.Size = new Size(75, 61);
@@ -354,6 +373,7 @@
             // divideBtn
             // 
             divideBtn.Dock = DockStyle.Fill;
+            divideBtn.Font = new Font("Segoe UI", 12F);
             divideBtn.Location = new Point(319, 70);
             divideBtn.Name = "divideBtn";
             divideBtn.Size = new Size(73, 61);
@@ -364,6 +384,7 @@
             // n9Btn
             // 
             n9Btn.Dock = DockStyle.Fill;
+            n9Btn.Font = new Font("Segoe UI", 15F);
             n9Btn.Location = new Point(240, 70);
             n9Btn.Name = "n9Btn";
             n9Btn.Size = new Size(73, 61);
@@ -374,6 +395,7 @@
             // n8Btn
             // 
             n8Btn.Dock = DockStyle.Fill;
+            n8Btn.Font = new Font("Segoe UI", 15F);
             n8Btn.Location = new Point(161, 70);
             n8Btn.Name = "n8Btn";
             n8Btn.Size = new Size(73, 61);
@@ -384,6 +406,7 @@
             // n7Btn
             // 
             n7Btn.Dock = DockStyle.Fill;
+            n7Btn.Font = new Font("Segoe UI", 15F);
             n7Btn.Location = new Point(82, 70);
             n7Btn.Name = "n7Btn";
             n7Btn.Size = new Size(73, 61);
@@ -395,6 +418,7 @@
             // 
             tableLayoutPanel2.SetColumnSpan(ceBtn, 2);
             ceBtn.Dock = DockStyle.Fill;
+            ceBtn.Font = new Font("Segoe UI", 12F);
             ceBtn.Location = new Point(240, 3);
             ceBtn.Name = "ceBtn";
             ceBtn.Size = new Size(152, 61);
@@ -406,6 +430,7 @@
             // 
             tableLayoutPanel2.SetColumnSpan(backspaceBtn, 2);
             backspaceBtn.Dock = DockStyle.Fill;
+            backspaceBtn.Font = new Font("Segoe UI", 12F);
             backspaceBtn.Location = new Point(82, 3);
             backspaceBtn.Name = "backspaceBtn";
             backspaceBtn.Size = new Size(152, 61);
@@ -416,6 +441,7 @@
             // cBtn
             // 
             cBtn.Dock = DockStyle.Fill;
+            cBtn.Font = new Font("Segoe UI", 12F);
             cBtn.Location = new Point(398, 3);
             cBtn.Name = "cBtn";
             cBtn.Size = new Size(75, 61);
@@ -426,6 +452,7 @@
             // memClearBtn
             // 
             memClearBtn.Dock = DockStyle.Fill;
+            memClearBtn.Font = new Font("Segoe UI", 12F);
             memClearBtn.Location = new Point(3, 70);
             memClearBtn.Name = "memClearBtn";
             memClearBtn.Size = new Size(73, 61);
@@ -447,11 +474,12 @@
             // 
             calBox.AutoSize = true;
             calBox.Dock = DockStyle.Fill;
+            calBox.Font = new Font("Segoe UI", 15F);
             calBox.Location = new Point(3, 38);
             calBox.Name = "calBox";
             calBox.Size = new Size(476, 42);
             calBox.TabIndex = 1;
-            calBox.Text = "0.";
+            calBox.Text = "0";
             calBox.TextAlign = ContentAlignment.MiddleRight;
             // 
             // FormBai6

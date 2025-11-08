@@ -47,6 +47,7 @@ namespace Bai09
             addUpdateBtn.Click += AddUpdateBtn_Click;
             deleteBtn.Click += DeleteBtn_Click;
             deselectBtn.Click += DeselectBtn_Click;
+            helpToolStripButton.Click += HelpToolStripButton_Click;
 
 
             // Saving
@@ -63,18 +64,28 @@ namespace Bai09
             FormClosing += FromBai9_FormClosing;
         }
 
+        private void HelpToolStripButton_Click(object? sender, EventArgs e)
+        {
+            var message = "App version 1.0";
+            MessageBoxHelper.ShowInfo(message);
+        }
+
         private void NewToolStripBtn_Click(object? sender, EventArgs e)
         {
-            if (!isDirty) return;
+            if (!isDirty)
+            {
+                ClearInput();
+                _students.Clear();
 
-            DialogResult result = MessageBox.Show(
-                "Chưa lưu thông tin, lưu trước khi tạo mới?",
-                "Confirm Close",
-                MessageBoxButtons.YesNoCancel,
-                MessageBoxIcon.Question
+                return;
+            }
+
+            DialogResult result = MessageBoxHelper.ShowConfirmation(
+                     "Chưa lưu thông tin, lưu trước khi tạo?",
+                     MessageBoxButtons.YesNoCancel
             );
 
-            if (DialogResult.Yes == result)
+            if (result == DialogResult.Yes)
             {
                 var saved = SaveClick();
 
@@ -95,22 +106,22 @@ namespace Bai09
         private void FromBai9_FormClosing(object? sender, FormClosingEventArgs e)
         {
             if (!isDirty) return;
-            
-            DialogResult result = MessageBox.Show(
+
+
+            DialogResult result = MessageBoxHelper.ShowConfirmation(
                 "Chưa lưu thông tin, lưu trước khi đóng?",
-                "Confirm Close",                
-                MessageBoxButtons.YesNoCancel,         
-                MessageBoxIcon.Question
+                MessageBoxButtons.YesNoCancel
             );
 
-            if (DialogResult.Yes == result) {
+            if (result == DialogResult.Yes) {
                 var saved = SaveClick();
                 if (!saved) e.Cancel = true;
 
-            }else if (DialogResult.Cancel == result)
+            }else if (result == DialogResult.Cancel)
             {
                 e.Cancel = true;
             }
+
 
         }
 
@@ -199,6 +210,9 @@ namespace Bai09
 
         private void DeleteBtn_Click(object? sender, EventArgs e)
         {
+            if (MessageBoxHelper.ShowConfirmation("Bạn có muốn xóa không") == DialogResult.Cancel)
+                return;
+
             mssvTextbox.Text = mssvTextbox.Text.Trim();
             int index = -1;
             for (int i = 0; i < _students.Count; i++)
@@ -208,7 +222,6 @@ namespace Bai09
                 {
                     index = i;
                     break;
-
                 }
             }
 
@@ -216,6 +229,9 @@ namespace Bai09
             {
                 _students.RemoveAt(index);
                 isDirty = true;
+            }else
+            {
+                MessageBoxHelper.ShowError("Tài khoản không tồn tại");
             }
         }
 

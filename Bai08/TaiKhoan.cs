@@ -6,9 +6,9 @@
         public string SoTK {get; private set;}
         public string TenTK {get; private set;}
         public string DiaChiKH {get; private set;}
-        public uint SoTienTrongTK { get; private set; }
+        public ulong SoTienTrongTK { get; private set; }
 
-        public TaiKhoan(string soTK, string tenTK, string diaChiKH, uint soTienTrongTK)
+        public TaiKhoan(string soTK, string tenTK, string diaChiKH, ulong soTienTrongTK)
         {
             SoTK = soTK;
             TenTK = tenTK;
@@ -37,7 +37,7 @@
                 subs[1].Text,
                 subs[2].Text,
                 subs[3].Text,
-                uint.Parse(subs[4].Text)
+                ulong.Parse(subs[4].Text)
             )
             { 
                 Index = idx
