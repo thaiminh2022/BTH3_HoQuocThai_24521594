@@ -18,6 +18,7 @@ namespace Bai01
             {
                 AddLog("Show example clicked");
                 exampleForm = new FormShowcase();
+                AddLog("Form 1 constructed 🔨");
 
                 exampleForm.Load += ExampleForm_Load;
                 exampleForm.Activated += ExampleForm_Activate;
