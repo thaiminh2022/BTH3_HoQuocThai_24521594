@@ -36,8 +36,6 @@ namespace Bai01
                 logTextBox.Text = string.Empty;
             };
 
-            Construct();
-
            
         }
 
@@ -84,6 +82,5 @@ namespace Bai01
             AddLog("Example form loaded 🚀");
         }
 
-        void Construct() { }
     }
 }
