@@ -1,6 +1,6 @@
 ﻿namespace Bai08
 {
-    internal record TaiKhoan
+    internal class TaiKhoan
     {
         public int Index {get;  set;}
         public string SoTK {get; private set;}

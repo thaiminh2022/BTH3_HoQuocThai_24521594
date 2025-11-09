@@ -11,25 +11,13 @@
         {
             InitializeComponent();
             checkBoxes = [
-                checkBox1, 
-                checkBox2, 
-                checkBox3, 
-                checkBox4, 
-                checkBox5, 
-                checkBox6, 
-                checkBox7, 
-                checkBox8, 
-                checkBox9, 
-                checkBox10, 
-                checkBox11, 
-                checkBox12, 
-                checkBox13, 
-                checkBox14,
-                checkBox15
+                checkBox1, checkBox2, checkBox3, checkBox4, checkBox5, checkBox6, checkBox7, checkBox8, checkBox9, checkBox10, checkBox11, checkBox12, checkBox13, checkBox14,checkBox15
             ];
             for (int i = 0; i < checkBoxes.Count; i++) {
                 CheckBox checkBox = checkBoxes[i];
                 checkBox.UseVisualStyleBackColor = true;
+                
+                // Setting up what color the checkbox should use
                 checkBox.FlatAppearance.CheckedBackColor = _selectedColor;
 
                 var idx = i;
@@ -42,7 +30,7 @@
 
         private void EndBtn_Click(object? sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void RemoveBtn_Click(object? sender, EventArgs e)
@@ -68,6 +56,8 @@
             {
                 CheckBox checkBox = checkBoxes[i];
                 
+                // We use auto check and checked to determine whether the value is taken,
+                // If autocheck is false, the appearance / checked value wont change onclick
                 if (checkBox.Checked && checkBox.AutoCheck == true)
                 {
                     haveSelect = true;
@@ -83,6 +73,8 @@
                     };
                 }
             }
+
+            // If any new checkbox checked, we change the total amount label
             if (haveSelect)
                 totalLabel.Text = totalAmount.ToString();
         }

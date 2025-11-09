@@ -315,7 +315,7 @@
             sumLabel.Name = "sumLabel";
             sumLabel.Size = new Size(251, 33);
             sumLabel.TabIndex = 1;
-            sumLabel.Text = "10000";
+            sumLabel.Text = "0";
             sumLabel.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // FormBai8

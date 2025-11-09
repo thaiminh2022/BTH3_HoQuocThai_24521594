@@ -1,8 +1,4 @@
-﻿using System.Globalization;
-using System.Linq;
-using System.Runtime.Serialization;
-
-namespace Bai08
+﻿namespace Bai08
 {
     public partial class FormBai8 : Form
     {
@@ -18,16 +14,6 @@ namespace Bai08
             quitBtn.Click += (_, _) => Close();
 
             accountListView.SelectedIndexChanged += AccountListView_SelectedIndexChanged;
-            FormClosing += FormBai8_FormClosing;
-        }
-
-        private void FormBai8_FormClosing(object? sender, FormClosingEventArgs e)
-        {
-            var result = MessageBox.Show("Confirm closed?", "Confirm close", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-            if (result != DialogResult.OK)
-            {
-                e.Cancel = true;
-            } 
         }
 
         private void DeleteBtn_Click(object? sender, EventArgs e)
@@ -99,14 +85,15 @@ namespace Bai08
             
             var textCond = !string.IsNullOrWhiteSpace(stkInput.Text) &&
                 !string.IsNullOrWhiteSpace(tenKHInput.Text) &&
-                !string.IsNullOrWhiteSpace(diaChiInput.Text);
+                !string.IsNullOrWhiteSpace(diaChiInput.Text) &&
+                !stkInput.Text.Any(char.IsWhiteSpace);            
 
             var numCond = ulong.TryParse(soTienInput.Text, out _);
 
 
             if (!textCond || !numCond)
             {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!");
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin! Các thông tin không được để trống, mục tiền phải nhập với đơn vị VNĐ, số tài khoản phải là chuỗi liền mạch");
                 return false;
             }
             return true;
@@ -141,6 +128,7 @@ namespace Bai08
                 tk.Index = taiKhoans.Count;
                 taiKhoans.Add(tk);
                 accountListView.Items.Add(tk.ToListViewItem());
+                MessageBox.Show("Thêm dữ liệu thành công");
             }
             else
             {
@@ -148,8 +136,8 @@ namespace Bai08
                 tk.Index = foundIndex;
                 taiKhoans[foundIndex] = tk;
                 accountListView.Items.RemoveAt(tk.Index);
-                accountListView.Items.Insert(tk.Index, tk.ToListViewItem()); 
-                
+                accountListView.Items.Insert(tk.Index, tk.ToListViewItem());
+                MessageBox.Show("Cập nhật dữ liệu thành công");
             }
 
             UpdateMoneyLabel();

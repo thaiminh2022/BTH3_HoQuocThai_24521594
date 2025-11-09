@@ -76,6 +76,9 @@ namespace Bai09
             {
                 ClearInput();
                 _students.Clear();
+                _storageJson = null;
+                isDirty = false;
+                saveFileDialog.FileName = string.Empty;
 
                 return;
             }
@@ -191,7 +194,6 @@ namespace Bai09
             if (_storageJson is null)
             {
                return SaveAsClick();
-               
             }
             try
             {
@@ -300,6 +302,12 @@ namespace Bai09
 
             if (!CheckValidity(mssvTextbox, "Phải nhập mssv"))
                 return;
+
+            if (mssvTextbox.Text.Any(char.IsWhiteSpace))
+            {
+                MessageBoxHelper.ShowError("Mã sinh viên không được có khoảng trắng");
+                return;
+            }
 
 
             if (!CheckValidity(nameTextbox, "Phải nhập tên"))

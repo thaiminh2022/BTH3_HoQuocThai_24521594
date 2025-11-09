@@ -93,7 +93,6 @@
             // 
             // saveFileDialog
             // 
-            saveFileDialog.CheckFileExists = true;
             saveFileDialog.DefaultExt = "json";
             saveFileDialog.FileName = "data.json";
             saveFileDialog.Filter = "JSON | *.json";
@@ -542,7 +541,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "FromBai9";
-            Text = "Students Database";
+            Text = "Nhâp liệu sinh viên";
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)studentDataView).EndInit();
             groupBox1.ResumeLayout(false);

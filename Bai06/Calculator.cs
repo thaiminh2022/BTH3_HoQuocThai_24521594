@@ -14,16 +14,14 @@ namespace Bai06
             Divide = '/',
         }
 
-        private DataTable _dataTable;
-        public List<(Operator, double)> _buffer { get; private set; }
+        private readonly DataTable _dataTable;
+        private readonly List<(Operator, double)> _buffer;
         public string DisplayBufferString => GetDisplayBufferString();
         public bool Evaluated { get; private set; } = false;
 
         Operator _nextOperator = Operator.Noop;
-
         private double _lastResult = 0;
-
-        double? memoryValue = 0;
+        double? _memoryValue = 0;
 
 
         public Calculator()
@@ -34,25 +32,25 @@ namespace Bai06
 
         public void MemoryClear()
         {
-            memoryValue = null;
+            _memoryValue = null;
         }
 
         public void MemorySave(double value)
         {
-            memoryValue = value;
+            _memoryValue = value;
         }
         public void MemoryAdd(double value)
         {
-            if (memoryValue is null)
+            if (_memoryValue is null)
             {
                 MemorySave(value);
                 return;
             }
-            memoryValue += value;
+            _memoryValue += value;
         }
         public double? MemoryRecall()
         {
-            return memoryValue;
+            return _memoryValue;
         }
 
         public void AddToCalc(Operator op, double num)

@@ -1,10 +1,9 @@
-﻿using System.Runtime.Serialization;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Bai09
 {
-    internal record Student
+    internal class Student
     {
         public string MSSV { get; private set; }
         public string HoTen { get; private set; }
